@@ -1,0 +1,16 @@
+---
+- name: Cleanup project
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Shut down containers
+      command: make down
+      args:
+        chdir: /home/{{ owner }}/inception
+
+    - name: Delete data volumes
+      file:
+        path: /home/{{ owner }}/data
+        state: absent
+      when: action_type == "remove"

@@ -1,0 +1,44 @@
+---
+
+- name: copy project to ubuntu-cloud
+  copy:
+    src: ../inception
+    dest: ./
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+
+- name: create volumes data folder
+  file:
+    path: /home/{{ owner }}/data
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+
+- name: create mariadb volume file
+  file:
+    path: /home/{{ owner }}/data/mariadb
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+
+- name: create wordpress volume file
+  file:
+    path: /home/{{ owner }}/data/wordpress
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+
+- name: test
+  shell: curl http://ifconfig.me
+  register: external_ip
+
+
+- name: add domen /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ external_ip.stdout }} {{ domen }}"
+    state: present

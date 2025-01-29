@@ -1,0 +1,42 @@
+---
+    - name: Get Os Arch
+      command: dpkg --print-architecture
+      register: os_arch
+
+    - name: Get Os Version
+      shell: . /etc/os-release && echo "$VERSION_CODENAME"
+      register: os_vers
+
+    - name: download dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+          - make
+          - python3
+        state: present
+
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: "{{ GPG_key }}"
+        state: present
+
+    - name: Add Docker repository to APT sources
+      apt_repository:
+        repo: "deb [arch={{ os_arch.stdout }}] {{ docker_repo }} {{ os_vers.stdout }} stable"
+        state: present
+
+    - name: Install Docker and dependencies
+      apt:
+        update_cache: yes
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present

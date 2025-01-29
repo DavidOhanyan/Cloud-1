@@ -1,0 +1,14 @@
+# Каталог провайдеров Terraform
+.terraform/
+
+# Файлы состояния Terraform (могут содержать конфиденциальные данные)
+terraform.tfstate
+terraform.tfstate.backup
+acces_key_gcp.json
+# Временные файлы блокировки Terraform
+.terraform.tfstate.lock.info
+
+.terraform.lock.hcl
+./states/
+
+.env

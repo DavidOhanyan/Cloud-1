@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  nginx:
+    container_name: nginx
+    depends_on:
+      - wordpress
+    build: ./requirements/nginx/
+    volumes:
+      - wp_volume:/var/www/html/
+    restart: always
+    networks:
+      - bridge-network
+    env_file:
+      - .env
+    ports:
+      - "443:443"
+
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    volumes:
+      - db_volume:/var/lib/mysql/
+    networks:
+      - bridge-network
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    build: ./requirements/wordpress/
+    volumes:
+      - wp_volume:/var/www/html/
+    restart: always
+    networks:
+      - bridge-network
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "wp", "db", "check", "--allow-root"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    
+volumes:
+  wp_volume:
+    driver: local
+    driver_opts:
+      device: /home/dohanyan/data/wordpress
+      o: bind
+      type: none
+  db_volume:
+    driver: local
+    driver_opts:
+      device: /home/dohanyan/data/mariadb
+      o: bind
+      type: none
+
+networks:
+  bridge-network:
+    driver: bridge
+
