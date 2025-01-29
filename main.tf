@@ -1,8 +1,8 @@
 provider "google" {
   credentials   = file("./acces_key_gcp.json")
-  project       = "learning-442712"
-  region        = "us-central1"
-  zone          = "us-central1-a"
+  project       = "your-project"
+  region        = "your-region"
+  zone          = "your zone"
 }
 
 terraform {
@@ -21,7 +21,7 @@ locals {
 }
 
 resource "google_compute_instance" "my_instance" {
-  name          = "learning"
+  name          = "cloud-1"
   machine_type  = "e2-medium"
   zone          = "us-central1-a"
 
