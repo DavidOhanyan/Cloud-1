@@ -15,7 +15,7 @@ The project includes:
 - **Terraform** — for managing infrastructure as code.
 - **Ansible** — for automating server setup and configuration.
 - **GCP** — cloud platform for deploying servers.
-- **Docker** and **Kubernetes** — for containerization (if applicable).
+- **Docker** and **Docker Compose** — for containerization (if applicable).
 - **Shell scripting** — for auxiliary scripting tasks.
 
 ## Repository Structure
