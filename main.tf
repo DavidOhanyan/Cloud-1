@@ -68,8 +68,13 @@ resource "local_file" "ansible_host" {
   filename = "hosts"
 }
 
-resource "local_file" "ansible_group_vasr_file" {
-  count = fileexists("${path.module}/group_vars/${var.ansible_group}.yaml") ? 0 : 1
-  filename = "${path.module}/group_vars/${var.ansible_group}.yaml"
-  content  = ""
+resource "local_file" "ansible_group_vars" {
+  filename = "./group_vars/${var.ansible_group}.yaml"
+  content  = <<EOF
+owner:       ${var.ssh_user}
+${var.ansible_param[0]}:      ${var.ssh_user}
+docker_repo: ${var.docker_repo}
+GPG_key:     ${var.GPG_key}
+EOF
 }
+

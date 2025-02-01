@@ -21,3 +21,16 @@ variable "server_nick" {
   type        = string
   default     = "server1"
 }
+
+variable "docker_repo" {
+  description = "URL for Docker repository"
+  type        = string
+  default     = "https://download.docker.com/linux/ubuntu"
+}
+
+variable "GPG_key" {
+  description = "URL for the GPG key of the Docker repository"
+  type        = string
+  default     = "https://download.docker.com/linux/ubuntu/gpg"
+}
+
