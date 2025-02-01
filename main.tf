@@ -1,8 +1,8 @@
 provider "google" {
   credentials   = file("./acces_key_gcp.json")
-  project       = "your-project"
-  region        = "your-region"
-  zone          = "your zone"
+  project       = "learning-442712"
+  region        = "us-central1"
+  zone          = "us-central1-a"
 }
 
 terraform {
@@ -63,7 +63,7 @@ resource "local_file" "ansible_host" {
   content  =<<EOF
  [${var.ansible_group}]
 
- ${var.server_nick} ${var.ansible_param[0]}${var.ssh_user} ${var.ansible_param[1]}${local.ip_address}
+ ${var.server_nick} ${var.ansible_param[1]}=${local.ip_address}
   EOF
   filename = "hosts"
 }

@@ -1,3 +1,3 @@
  [gcp_servers]
 
- server1 ansible_user=dohanyan ansible_host=34.29.200.147
+ server1 ansible_host=34.41.52.70

@@ -32,13 +32,3 @@
     group: "{{ owner }}"
     mode: '0755'
 
-- name: test
-  shell: curl http://ifconfig.me
-  register: external_ip
-
-
-- name: add domen /etc/hosts
-  lineinfile:
-    path: /etc/hosts
-    line: "{{ external_ip.stdout }} {{ domen }}"
-    state: present

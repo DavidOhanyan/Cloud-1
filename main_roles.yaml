@@ -1,0 +1,16 @@
+---
+- name: cloud-1 project
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - setup_docker
+    - setup_envirment
+    - update_env
+
+  tasks:
+    - name: Build inception project
+      command: make all
+      args:
+        chdir: /home/{{ owner }}/inception

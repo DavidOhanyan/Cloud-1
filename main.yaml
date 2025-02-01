@@ -1,5 +1,4 @@
 ---
-
 - name: cloud-1 project
   hosts: all
   become: yes
@@ -11,8 +10,10 @@
     - name: setup envirment
       include: ./playbooks/setup_envirment.yaml
 
+    - name: update env in inception
+      include: ./playbooks/update_env.yml
+
     - name: Build inception project
       command: make
       args:
         chdir: /home/{{ owner }}/inception
-

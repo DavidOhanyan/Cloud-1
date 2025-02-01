@@ -1,0 +1,58 @@
+---
+- name: Copy project to Ubuntu-cloud (specific to Ubuntu)
+  copy:
+    src: inception
+    dest: /home/{{ owner }}
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Copy project to RedHat-cloud (specific to RedHat)
+  copy:
+    src: inception
+    dest: /home/{{ owner }}
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Create volume directories for Ubuntu/Debian
+  file:
+    path: /home/{{ owner }}/data
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Create volume directories for RedHat-based systems
+  file:
+    path: /home/{{ owner }}/data
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Create mariadb volume directory
+  file:
+    path: /home/{{ owner }}/data/mariadb
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+
+- name: Create wordpress volume directory
+  file:
+    path: /home/{{ owner }}/data/wordpress
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ owner }}"
+    mode: '0755'
+
+- name: Fallback handling for unrecognized OS
+  debug:
+    msg: "Unrecognized OS, no action taken."
+  when: ansible_facts['os_family'] not in ['Debian', 'RedHat']
+

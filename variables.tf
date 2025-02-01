@@ -7,7 +7,7 @@ variable "ssh_user" {
 variable "ansible_param" {
     description = "this is ansible parametrs for configure hosts"
     type = list(string)
-    default = ["ansible_user=", "ansible_host="]
+    default = ["ansible_user", "ansible_host"]
 }
 
 variable "ansible_group" {
