@@ -1,0 +1,4 @@
+owner:       dohanyan
+ansible_user:      dohanyan
+docker_repo: https://download.docker.com/linux/ubuntu
+GPG_key:     https://download.docker.com/linux/ubuntu/gpg

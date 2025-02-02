@@ -11,17 +11,17 @@ terraform {
   }
 }
 
+# Создаём 3 статических IP-адреса
 resource "google_compute_address" "static_ip" {
-  name   = "my-web-ip"
+  count  = 3
+  name   = "vm-ip-${count.index}"
   region = "us-central1"
 }
 
-locals {
-  ip_address = google_compute_address.static_ip.address
-}
-
-resource "google_compute_instance" "my_instance" {
-  name          = "cloud-1"
+# Создаём 3 ВМ
+resource "google_compute_instance" "vm" {
+  count         = 3
+  name          = "cloud-${count.index + 1}"
   machine_type  = "e2-medium"
   zone          = "us-central1-a"
 
@@ -40,34 +40,22 @@ resource "google_compute_instance" "my_instance" {
   network_interface {
     network = "default"
     access_config {
-      nat_ip = google_compute_address.static_ip.address
+      nat_ip = google_compute_address.static_ip[count.index].address
     }
   }
 }
 
-resource "google_compute_firewall" "allow-http-https" {
-  name    = "allow-http-https"
-  network = "default"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "443"]
-  }
-
-  direction     = "INGRESS"
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["inception", "http-server", "https-server"]
-}
-
-resource "local_file" "ansible_host" {
-  content  =<<EOF
- [${var.ansible_group}]
-
- ${var.server_nick} ${var.ansible_param[1]}=${local.ip_address}
-  EOF
+# Файл hosts с IP всех ВМ
+resource "local_file" "ansible_hosts" {
+  content = <<EOF
+[${var.ansible_group}]
+%{for i in range(3)} cloud-${i + 1} ansible_host=${google_compute_address.static_ip[i].address}
+%{endfor}
+EOF
   filename = "hosts"
 }
 
+# Файл group_vars
 resource "local_file" "ansible_group_vars" {
   filename = "./group_vars/${var.ansible_group}.yaml"
   content  = <<EOF
