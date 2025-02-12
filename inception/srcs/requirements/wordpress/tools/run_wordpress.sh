@@ -1,5 +1,8 @@
 #!/bin/sh
 
+CURRENT_IP=$(curl ifconfig.me)
+
+
 if [ ! -e ./wp-config.php ]; then
     rm -rf *
     wp core download --allow-root
@@ -10,8 +13,16 @@ if [ ! -e ./wp-config.php ]; then
     sed -i "s/database_name_here/$MYSQL_DB/g" wp-config-sample.php
     cp wp-config-sample.php wp-config.php
 
-	  rm -rf ./wp-config-sample.php
+	
+    echo "define('WP_HOME', 'http://$CURRENT_IP');" >> wp-config.php
+    echo "define('WP_SITEURL', 'http://$CURRENT_IP');" >> wp-config.php
+
+     rm -rf ./wp-config-sample.php
 fi
+
+echo "# Обновляем URL в базе данных WordPress на текущий IP"
+wp option update home "http://$CURRENT_IP" --allow-root
+wp option update siteurl "http://$CURRENT_IP" --allow-root
 
 if ! wp db query "SHOW TABLES LIKE 'wp_users';" --allow-root | grep -q "wp_users"; then
       echo "\033[32mWordPress tables not found. Running wp core install...\033[0m"

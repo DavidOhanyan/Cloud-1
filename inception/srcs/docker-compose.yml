@@ -1,6 +1,19 @@
 version: "3.9"
 
 services:
+  phpmyadmin:
+    container_name: phpmyadmin
+    depends_on:
+      - mariadb
+    build: ./requirements/phpmyadmin/
+    restart: always
+    ports:
+      - "8080:80"
+    networks:
+      - bridge-network
+    env_file:
+      - .env
+
   nginx:
     container_name: nginx
     depends_on:

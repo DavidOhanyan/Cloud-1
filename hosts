@@ -1,5 +1,0 @@
-[gcp_servers]
- cloud-1 ansible_host=34.58.44.2
- cloud-2 ansible_host=146.148.73.111
- cloud-3 ansible_host=35.225.133.166
-

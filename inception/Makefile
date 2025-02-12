@@ -1,6 +1,6 @@
-all: up #configure_volumes
+all: up configure_volumes
 
-up: #configure_volumes
+up: configure_volumes
 	@echo "Lifting containers..."
 	@docker compose -f ./srcs/docker-compose.yml up -d --build
 	@echo "!DONE!"
@@ -25,10 +25,10 @@ stop:
 	docker compose -f ./srcs/docker-compose.yml stop
 	@echo "!DONE!"
 
-# configure_volumes:
-# 	@mkdir -p /home/$USER/data/mariadb
-# 	@mkdir -p /home/$USER/data/wordpress
+configure_volumes:
+	mkdir -p /home/$(USER)/data/mariadb
+	mkdir -p /home/$(USER)/data/wordpress
 
 remove_volumes:
-	@rm -rf home/$USER/data/mariadb
-	@rm -rf /home/$USER/data/wordpress
+	@rm -rf home/$(USER)/data/mariadb
+	@rm -rf /home/$(USER)/data/wordpress
