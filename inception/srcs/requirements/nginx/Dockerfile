@@ -10,7 +10,7 @@ COPY ./tools/run_nginx.sh /
 
 WORKDIR /
 
-EXPOSE 443
+EXPOSE 443 80
 
 RUN chmod +x run_nginx.sh
 
