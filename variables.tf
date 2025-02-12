@@ -34,3 +34,10 @@ variable "GPG_key" {
   default     = "https://download.docker.com/linux/ubuntu/gpg"
 }
 
+variable "instance_count" {
+  description	= "cCount of vms"
+  type		= number
+  default	= 1
+}
+
+

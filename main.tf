@@ -12,13 +12,13 @@ terraform {
 }
 
 resource "google_compute_address" "static_ip" {
-  count  = 3
+  count  = var.instance_count
   name   = "vm-ip-${count.index}"
   region = "us-central1"
 }
 
 resource "google_compute_instance" "vm" {
-  count         = 3
+  count         = var.instance_count
   name          = "cloud-${count.index + 1}"
   machine_type  = "e2-medium"
   zone          = "us-central1-a"
@@ -31,7 +31,7 @@ resource "google_compute_instance" "vm" {
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      image = "ubuntu-os-cloud/ubuntu-2004-lts"
     }
   }
 
@@ -59,7 +59,7 @@ resource "google_compute_firewall" "allow_8080" {
 resource "local_file" "ansible_hosts" {
   content = <<EOF
 [${var.ansible_group}]
-%{for i in range(3)} cloud-${i + 1} ansible_host=${google_compute_address.static_ip[i].address}
+%{for i in range(var.instance_count)} cloud-${i + 1} ansible_host=${google_compute_address.static_ip[i].address}
 %{endfor}
 EOF
   filename = "hosts"
