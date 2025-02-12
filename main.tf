@@ -11,14 +11,12 @@ terraform {
   }
 }
 
-# Создаём 3 статических IP-адреса
 resource "google_compute_address" "static_ip" {
   count  = 3
   name   = "vm-ip-${count.index}"
   region = "us-central1"
 }
 
-# Создаём 3 ВМ
 resource "google_compute_instance" "vm" {
   count         = 3
   name          = "cloud-${count.index + 1}"
@@ -29,7 +27,7 @@ resource "google_compute_instance" "vm" {
     ssh-keys = "${var.ssh_user}:${file("~/.ssh/id_rsa.pub")}"
   }
 
-  tags = ["inception", "http-server", "https-server"]
+  tags = ["inception", "http-server", "https-server", "phpmyadmin"]
 
   boot_disk {
     initialize_params {
@@ -45,7 +43,19 @@ resource "google_compute_instance" "vm" {
   }
 }
 
-# Файл hosts с IP всех ВМ
+resource "google_compute_firewall" "allow_8080" {
+  name    = "allow-8080"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8080"]
+  }
+
+  source_ranges = ["0.0.0.0/0"] 
+  target_tags   = ["phpmyadmin"] 
+}
+
 resource "local_file" "ansible_hosts" {
   content = <<EOF
 [${var.ansible_group}]
