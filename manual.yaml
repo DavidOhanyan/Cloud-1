@@ -1,0 +1,27 @@
+---
+- name: deploy independently
+  hosts: all
+  become: true
+
+  tasks:
+    - name: deploy only nginx
+      shell: docker build -t nginx ./inception/srcs/requirements/nginx
+      when: image == "nginx"
+
+    - name: deploy only mariadb
+      shell: docker build -t mariadb ./inception/srcs/requirements/mariadb
+      when: image == "mariadb"
+
+    - name: deploy only wordpress
+      shell: docker build -t wordpress ./inception/srcs/requirements/wordpress
+      when: image == "wordpress"
+
+    - name: deploy only phpmyadmin
+      shell: docker build -t phpmyadmin ./inception/srcs/requirements/phpmyadmin
+      when: image == "phpmyadmin"
+    
+    - name: start compose
+      command: make
+      args:
+        chdir: /home/{{ owner }}/inception
+      when: image == "up"

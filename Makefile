@@ -48,5 +48,20 @@ down:
 deep_down:
 	ansible-playbook playbooks/cleanup.yaml --extra-vars "action_type=remove"
 
-.PHONY: init plan apply upgrade destroy up down deep_down docker help
+nginx:
+	ansible-playbook manual.yaml --extra-vars "image=nginx"
+
+mariadb:
+	ansible-playbook manual.yaml --extra-vars "image=mariadb"
+
+wordpress:
+	ansible-playbook manual.yaml --extra-vars "image=wordpress"
+
+phpadmin:
+	ansible-playbook manual.yaml --extra-vars "image=phpmyadmin"
+
+manual:
+	ansible-playbook manual.yaml --extra-vars "image=up"
+
+.PHONY: init plan apply upgrade destroy up down deep_down docker help nginx mariadb wordpress phpadmin manual
 
